@@ -1,10 +1,15 @@
 import express from 'express';
 import { chats } from './data/data.js';
 import dotenv from 'dotenv';
+import cors from 'cors'
+import connectDB from './config/db.js'
+import colors from 'colors'
 
-const app = express();
+const app = express(); 
 dotenv.config();
-
+connectDB();
+app.use(cors())
+ 
 const PORT = process.env.PORT || 5000;
 
 app.get('/',(req,res)=>{
@@ -21,5 +26,5 @@ app.get('/api/chat/:id',(req,res)=>{
 })
 
 app.listen(PORT,()=>{
-    console.log("Listening at port",PORT);
+    console.log(`Listening at port ${PORT}` .yellow.bold);
 });
