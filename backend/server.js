@@ -4,27 +4,26 @@ import dotenv from 'dotenv';
 import cors from 'cors'
 import connectDB from './config/db.js'
 import colors from 'colors'
+import userRoutes from './routes/userRoutes.js';
+import bodyParser from 'body-parser';
+import { errorHandler, notFound } from './middleware/errorMiddleware.js'
 
-const app = express(); 
+const app = express();
 dotenv.config();
 connectDB();
-app.use(cors())
- 
+app.use(cors());
+app.use(express.json()); // to accept JSON data
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 const PORT = process.env.PORT || 5000;
 
-app.get('/',(req,res)=>{
-    res.send();
-})
+app.use('/api/user', userRoutes);
 
-app.get('/api/chat',(req,res)=>{
-    res.send(chats);
-})
+app.use(notFound)
+app.use(errorHandler)
 
-app.get('/api/chat/:id',(req,res)=>{
-    const singleChat = chats.find((c) => c._id === req.params.id);
-    res.send(singleChat);
-})
-
-app.listen(PORT,()=>{
-    console.log(`Listening at port ${PORT}` .yellow.bold);
+app.listen(PORT, () => {
+    console.log(`Listening at port ${PORT}`.yellow.bold);
 });

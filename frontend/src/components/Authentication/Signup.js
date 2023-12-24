@@ -1,20 +1,120 @@
-import { VStack, FormControl, FormLabel, Input, InputGroup, InputRightElement, Button } from '@chakra-ui/react'
+import { VStack, FormControl, FormLabel, Input, InputGroup, InputRightElement, Button, useToast } from '@chakra-ui/react'
 import React, { useState } from 'react'
+import axios from 'axios'
+import { useHistory } from 'react-router-dom'
 
 const SignUp = () => {
+    const [show, setShow] = useState(false);
     const [name, setName] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [confirmpassword, setConfirmpassword] = useState();
     const [pic, setPic] = useState();
-    const [show, setShow] = useState(false);
+    const [loading, setLoading] = useState(false)
+    const toast = useToast()
+    const history = useHistory();
 
-    const handleClick = ()=> setShow(!show);
+    const handleClick = () => setShow(!show);
 
-    const postDetails = (pics)=>{
+    const postDetails = (pic) => {
+        setLoading(true);
+        if (pic === undefined) {
+            toast({
+                title: 'Please select an image!',
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            })
+            return;
+        }
+
+        if (pic.type === 'image/jpeg' || pic.type === 'image/png') {
+            const data = new FormData();
+            data.append("file", pic);
+            data.append("upload_preset", "chat-app");
+            data.append("cloud_name", "dfgy1sffv");
+            fetch("https://api.cloudinary.com/v1_1/dfgy1sffv/image/upload", {
+                method: "post",
+                body: data,
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    setPic(data.url.toString());
+                    setLoading(false);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setLoading(false);
+                })
+
+        } else {
+            toast({
+                title: 'Please select an image with extension jpeg or png',
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            })
+        }
     }
 
-    const submitHandler = ()=>{
+    const submitHandler = async () => {
+        setLoading(true);
+        if (!name || !email || !password || !confirmpassword) {
+            toast({
+                title: 'Please fill all the fields!',
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            })
+            setLoading(false);
+            return;
+        }
+
+        if (password !== confirmpassword) {
+            toast({
+                title: 'Passwords do not match!',
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            })
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const config = {
+                headers: {
+                    "Content-type": 'application/json'
+                },
+            };
+
+            const { data } = await axios.post(
+                "/api/user",
+                { name, email, password, pic },
+                config
+            )
+
+            toast({
+                title: 'Registration Successful!',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            })
+
+            localStorage.setItem("userInfo", JSON.stringify(data));
+            setLoading(false);
+            history.push('/chats');
+        }
+        catch (error) {
+            toast({
+                title: 'Error Occurred !',
+                description: error.response.data.message,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            })
+            setLoading(false);
+        }
     }
 
     return (
@@ -44,7 +144,7 @@ const SignUp = () => {
 
                 <InputGroup size='md'>
                     <Input
-                        type={show?"text":"password"}
+                        type={show ? "text" : "password"}
                         placeholder='Set Your Password'
                         onChange={(e) => { setPassword(e.target.value) }}
                     />
@@ -62,7 +162,7 @@ const SignUp = () => {
 
                 <InputGroup size='md'>
                     <Input
-                        type={show?"text":"password"}
+                        type={show ? "text" : "password"}
                         placeholder='Confirm Password'
                         onChange={(e) => { setConfirmpassword(e.target.value) }}
                     />
@@ -86,9 +186,10 @@ const SignUp = () => {
             </FormControl>
 
             <Button
-            colorScheme='blue'
-            mt='4px'
-            onClick={()=>submitHandler()}
+                colorScheme='blue'
+                mt='4px'
+                onClick={() => submitHandler()}
+                isLoading={loading}
             >
                 Sign Up
             </Button>
