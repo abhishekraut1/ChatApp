@@ -5,6 +5,7 @@ import cors from 'cors'
 import connectDB from './config/db.js'
 import colors from 'colors'
 import userRoutes from './routes/userRoutes.js';
+import chatRoutes from './routes/chatRoutes.js';
 import bodyParser from 'body-parser';
 import { errorHandler, notFound } from './middleware/errorMiddleware.js'
 
@@ -20,6 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 5000;
 
 app.use('/api/user', userRoutes);
+app.use('/api/chat',chatRoutes);
 
 app.use(notFound)
 app.use(errorHandler)
