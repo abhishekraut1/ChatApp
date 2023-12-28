@@ -2,9 +2,10 @@ import expressAsyncHandler from "express-async-handler";
 import Chat from '../models/chatModel.js'
 import User from "../models/userModel.js";
 
+// create chat
 const accessChat = expressAsyncHandler(async (req, res) => {
     const { userId } = req.body;
-
+    console.log(userId)
     if (!userId) {
         console.log("UserId param not sent with request");
         return res.sendStatus(400);
@@ -60,7 +61,6 @@ const fetchChats = expressAsyncHandler(async (req, res) => {
                     path: "latestMessage.sender",
                     select: "name pic email",
                 });
-
                 res.status(200).send(result);
             })
 
@@ -80,7 +80,7 @@ const createGroupChat = expressAsyncHandler(async (req, res) => {
     const users = JSON.parse(req.body.users);
     users.push(req.user);
 
-    if (users.length < 2) {
+    if (users.length < 3) {
         res
             .status(400)
             .send({ message: "More than 2 users are required to form Group Chat." })
