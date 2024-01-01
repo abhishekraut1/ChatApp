@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom';
 
+
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -48,7 +49,7 @@ const Login = () => {
             localStorage.setItem("userInfo", JSON.stringify(data));
             setLoading(false);
             history.push('/chats');
-
+            
         } catch (error) {
             toast({
                 title: 'Error Occurred!',

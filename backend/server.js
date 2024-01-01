@@ -6,6 +6,7 @@ import connectDB from './config/db.js'
 import colors from 'colors'
 import userRoutes from './routes/userRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
+import messageRoutes from './routes/messageRoutes.js'
 import bodyParser from 'body-parser';
 import { errorHandler, notFound } from './middleware/errorMiddleware.js'
 
@@ -15,13 +16,14 @@ connectDB();
 app.use(cors());
 app.use(express.json()); // to accept JSON data
 
-app.use(bodyParser.json());
+app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 5000;
 
-app.use('/api/user', userRoutes);
+app.use('/api/user', userRoutes); 
 app.use('/api/chat',chatRoutes);
+app.use('/api/message',messageRoutes);
 
 app.use(notFound)
 app.use(errorHandler)

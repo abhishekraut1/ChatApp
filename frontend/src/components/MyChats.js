@@ -5,8 +5,9 @@ import axios from 'axios';
 import { AddIcon } from '@chakra-ui/icons';
 import ChatLoading from './ChatLoading'
 import { getSender } from '../config/chatLogics';
+import GroupModal from '../components/miscellaneous/GroupModal'
 
-const MyChats = () => {
+const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState()
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
 
@@ -20,7 +21,7 @@ const MyChats = () => {
         }
       }
       const { data } = await axios.get("/api/chat", config);
-      console.log(data);
+      // console.log(data);
       setChats(data);
     } catch (error) {
       toast({
@@ -37,7 +38,7 @@ const MyChats = () => {
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
-  }, [])
+  }, [fetchAgain])
 
 
   return (
@@ -63,13 +64,17 @@ const MyChats = () => {
       >
         My Chats
 
-        <Button
-          display='flex'
-          fontSize={{ base: '17px', md: '10px', lg: '17px' }}
-          rightIcon={<AddIcon />}
-        >
-          New Group Chat
-        </Button>
+        <GroupModal>
+          <Button
+            display='flex'
+            fontSize={{ base: '17px', md: '10px', lg: '17px' }}
+            rightIcon={<AddIcon />}
+          >
+
+            New Group Chat
+          </Button>
+        </GroupModal>
+
       </Box>
       <Box
         display='flex'

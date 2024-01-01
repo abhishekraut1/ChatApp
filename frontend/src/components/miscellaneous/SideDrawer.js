@@ -156,7 +156,7 @@ const SideDrawer = () => {
         </Button>
 
         <Text fontSize='2xl' p='0 1em 0 0' fontFamily="Work Sans">
-          ChatApp
+          ChapApp
         </Text>
 
         <div>
@@ -198,7 +198,7 @@ const SideDrawer = () => {
           <DrawerBody >
             <Box display='flex' pb={2}>
               <Input
-                placeholder='Search by name of email'
+                placeholder='Search by name or email'
                 mr={2}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
