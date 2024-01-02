@@ -19,7 +19,6 @@ import {
   Spinner
 } from '@chakra-ui/react';
 import { BellIcon, ChevronDownIcon } from '@chakra-ui/icons'
-import { Tooltip } from 'react-tooltip'
 import React, { useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider';
 import ProfileModal from './ProfileModal';

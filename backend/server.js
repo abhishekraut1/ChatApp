@@ -9,6 +9,7 @@ import chatRoutes from './routes/chatRoutes.js';
 import messageRoutes from './routes/messageRoutes.js'
 import bodyParser from 'body-parser';
 import { errorHandler, notFound } from './middleware/errorMiddleware.js'
+import { Server, Socket } from 'socket.io';
 
 const app = express();
 dotenv.config();
@@ -26,8 +27,29 @@ app.use('/api/chat',chatRoutes);
 app.use('/api/message',messageRoutes);
 
 app.use(notFound)
-app.use(errorHandler)
+app.use(errorHandler) 
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Listening at port ${PORT}`.yellow.bold);
 });
+
+const io = new Server(server,{
+    pingTimeout: 60000,
+    cors:{
+        origin: 'http://localhost:3000'
+    }
+})
+
+io.on("connection",(socket)=>{
+    console.log("connected to socket.io");
+
+    socket.on('setup',(userData)=>{
+        socket.join(userData._id)
+        socket.emit('connected')
+    })
+
+    socket.on('join chat',(room)=>{
+        socket.join(room)
+        console.log("User joined room." + room)
+    })
+})

@@ -13,7 +13,7 @@ const ChatProvider = ({ children }) => {
         setUser(userInfo);
 
         if (!userInfo) {
-            history.push("/chat");
+            history.push("/");
         }
     }, [history])
 
