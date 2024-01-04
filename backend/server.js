@@ -10,8 +10,11 @@ import bodyParser from 'body-parser';
 import { errorHandler, notFound } from './middleware/errorMiddleware.js'
 import { Server } from 'socket.io';
 import path from 'path'
+import http from 'http'
 
 const app = express();
+const h = http.Server(app);
+
 dotenv.config();
 connectDB();
 app.use(cors());
@@ -46,7 +49,7 @@ if(process.env.NODE_ENV === 'production'){
 app.use(notFound)
 app.use(errorHandler) 
 
-const server = app.listen(PORT, () => {
+const server = h.listen(PORT, () => {
     console.log(`Listening at port ${PORT}`.yellow.bold);
 });
 
