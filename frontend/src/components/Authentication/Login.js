@@ -1,7 +1,8 @@
 import { VStack, FormControl, FormLabel, Input, InputGroup, InputRightElement, Button, useToast } from '@chakra-ui/react'
 import axios from 'axios';
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 
 const Login = () => {
@@ -11,7 +12,10 @@ const Login = () => {
     const [loading, setLoading] = useState(false)
 
     const toast = useToast()
-    const history = useHistory();
+    // const history = useHistory();
+    const navigate = useNavigate();
+
+
     const handleClick = () => setShow(!show);
 
     const submitHandler = async () => {
@@ -48,7 +52,8 @@ const Login = () => {
 
             localStorage.setItem("userInfo", JSON.stringify(data));
             setLoading(false);
-            history.push('/chats');
+            // history.push('/chats');
+            navigate('/chats');
             
         } catch (error) {
             toast({

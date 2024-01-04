@@ -1,9 +1,10 @@
 import { ViewIcon } from '@chakra-ui/icons'
 import { Button, IconButton, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react'
 import React from 'react'
+import randomUser from '../../images/randomUser.png'
 
-const ProfileModal = ({ user, children }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure()
+const ProfileModal = ({sender, children }) => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
         <>
@@ -23,7 +24,7 @@ const ProfileModal = ({ user, children }) => {
                         display='flex'
                         justifyContent='center'
                     >
-                        {user.name}
+                        {sender ? sender.name : ""}
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody                    
@@ -35,8 +36,8 @@ const ProfileModal = ({ user, children }) => {
                         <Image
                             borderRadius='full'
                             boxSize='150px'
-                            src={user.pic}
-                            alt={user.name}
+                            src={sender ? (sender.pic ? sender.pic: randomUser ) : ""}
+                            alt={sender ? sender.name : ""}
                         ></Image>
                         
                         <Text
@@ -44,12 +45,12 @@ const ProfileModal = ({ user, children }) => {
                         fontFamily='Work Sans'
 
                         >
-                            Email: {user.email}
+                            Email: {sender ? sender.email : ""}
                         </Text>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={onClose}>
+                        <Button colorScheme='blue' marginTop='-7px' onClick={onClose}>
                             Close
                         </Button>
                     </ModalFooter>

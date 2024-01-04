@@ -5,7 +5,7 @@ import User from "../models/userModel.js";
 // create chat
 const accessChat = expressAsyncHandler(async (req, res) => {
     const { userId } = req.body;
-    console.log(userId)
+    // console.log(userId)
     if (!userId) {
         console.log("UserId param not sent with request");
         return res.sendStatus(400);

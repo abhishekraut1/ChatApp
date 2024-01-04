@@ -18,14 +18,16 @@ import {
   useToast,
   Spinner
 } from '@chakra-ui/react';
-import { BellIcon, ChevronDownIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon } from '@chakra-ui/icons'
 import React, { useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider';
 import ProfileModal from './ProfileModal';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+// import { useHistory } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import ChatLoading from '../ChatLoading';
 import UserListItem from '../UserAvatar/UserListItem';
+import { getSender } from '../../config/chatLogics';
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("");
@@ -33,16 +35,17 @@ const SideDrawer = () => {
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState()
 
-  const { user, chats, setChats, setSelectedChat } = ChatState();
+  const { user, chats, setChats, setSelectedChat, notification, setNotification, userPic, setFetchAgain, fetchAgain } = ChatState();
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const history = useHistory();
+  // const history = useHistory();
+  const navigate = useNavigate();
   const toast = useToast();
 
   const logoutHandler = () => {
     localStorage.removeItem('userInfo')
-    history.push('/');
+    // history.push('/');
+    navigate('/')
   }
-
   const handleSearch = async () => {
     if (!search) {
       toast({
@@ -100,25 +103,25 @@ const SideDrawer = () => {
       const { data } = await axios.post('/api/chat', { userId }, config);
 
       if (!chats.find(c => c._id === data._id)) setChats([data, ...chats])
-      // else {
-      //   let index;
-      //   for(let i=chats.length-1;i>=0;i--){
-      //     if(chats[i]._id === data._id){
-      //       index = i;
-      //     }
-      //   }
-      //   for(let i=index;i>0;i--){
-      //     let x = chats[i];
-      //     chats[i] = chats[i-1];
-      //     chats[i-1] = x;
-      //   }
-      // }
+      else {
+        let index;
+        for(let i=chats.length-1;i>=0;i--){
+          if(chats[i]._id === data._id){
+            index = i;
+          }
+        }
+        for(let i=index;i>0;i--){
+          let x = chats[i];
+          chats[i] = chats[i-1];
+          chats[i-1] = x;
+        }
+      }
 
       setSelectedChat(data);
       setLoadingChat(false);
+      // setFetchAgain(!fetchAgain);
       onClose();
     } catch (error) {
-      console.log(error)
       console.log(error)
       toast({
         title: 'Error fetching the chat!',
@@ -130,6 +133,7 @@ const SideDrawer = () => {
       });
     }
   }
+
   return (
     <>
       <Box
@@ -155,15 +159,35 @@ const SideDrawer = () => {
         </Button>
 
         <Text fontSize='2xl' p='0 1em 0 0' fontFamily="Work Sans">
-          ChapApp
+          ChatApp
         </Text>
 
         <div>
-          <Menu>
-            <MenuButton p={2}>
-              <BellIcon fontSize='2xl' m={2} />
+          <Menu >
+            <MenuButton className="icon" p={2}>
+              <img style={{position: "relative", top: "7px", right: "7px"}} src="https://uxwing.com/wp-content/themes/uxwing/download/communication-chat-call/bell-icon.png" className="iconImg" alt="" />
+              {
+                notification.length > 0 &&
+                <div style={{ position: "absolute", top: "10px", right: "15px" }} className="counter">{notification.length}</div>
+              }
             </MenuButton>
-            {/* <MenuList></MenuList> */}
+            <MenuList pl={2}>
+              {!notification.length && "No New Messages Received"}
+              {notification.map((notif) =>
+                <MenuItem
+                  key={notif._id}
+                  onClick={() => {
+                    setSelectedChat(notif);
+                    setNotification(notification.filter((n) => n !== notif));
+                  }}
+                >
+                  {notif.isGroupChat
+                    ? `New Message in ${notif.chatName}`
+                    : `New Message from ${getSender(user, notif.users)}`
+                  }
+                </MenuItem>
+              )}
+            </MenuList>
           </Menu>
 
           <Menu>
@@ -172,11 +196,11 @@ const SideDrawer = () => {
                 size='sm'
                 cursor='pointer'
                 name={user.name}
-                src={user.pic} />
+                src={userPic} />
             </MenuButton>
 
             <MenuList>
-              <ProfileModal user={user}>
+              <ProfileModal >
                 <MenuItem>My Profile</MenuItem>
               </ProfileModal>
               <MenuDivider />
@@ -200,10 +224,11 @@ const SideDrawer = () => {
                 placeholder='Search by name or email'
                 mr={2}
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => setSearch(e.target.value)
+                }
                 onKeyDown={handleKeyPress}
               ></Input>
-              <Button onClick={handleSearch}>GO</Button>
+              <Button className='go-search' onClick={handleSearch}>GO</Button>
             </Box>
 
             {

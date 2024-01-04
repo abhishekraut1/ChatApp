@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { ChatState } from '../Context/ChatProvider'
-import { useToast, Box, Button, Stack, Text } from '@chakra-ui/react';
+import { useToast, Box, Button, Stack, Text, Avatar } from '@chakra-ui/react';
 import axios from 'axios';
 import { AddIcon } from '@chakra-ui/icons';
 import ChatLoading from './ChatLoading'
-import { getSender } from '../config/chatLogics';
+import { getSender, getSenderFull } from '../config/chatLogics';
 import GroupModal from '../components/miscellaneous/GroupModal'
 
-const MyChats = ({ fetchAgain }) => {
+const MyChats = () => {
   const [loggedUser, setLoggedUser] = useState()
-  const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
+  const { selectedChat, setSelectedChat, user, chats, setChats, fetchAgain } = ChatState();
 
   const toast = useToast();
 
@@ -26,7 +26,7 @@ const MyChats = ({ fetchAgain }) => {
     } catch (error) {
       toast({
         title: 'Error occurred!',
-        description: 'Failed to load chats',
+        // description: 'Failed to load chats',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -39,6 +39,8 @@ const MyChats = ({ fetchAgain }) => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
   }, [fetchAgain])
+
+  console.log(selectedChat)
 
 
   return (
@@ -55,7 +57,7 @@ const MyChats = ({ fetchAgain }) => {
       <Box
         pb={3}
         px={3}
-        fontSize={{ base: '28px', md: '30px' }}
+        fontSize={{ base: '25px',md:'20px', xl:'28px' }}
         fontFamily='Work Sans'
         display='flex'
         width='100%'
@@ -67,11 +69,11 @@ const MyChats = ({ fetchAgain }) => {
         <GroupModal>
           <Button
             display='flex'
-            fontSize={{ base: '17px', md: '10px', lg: '17px' }}
+            fontSize={{ base: '17px', md: '14px', lg: '17px' }}
             rightIcon={<AddIcon />}
           >
 
-            New Group Chat
+            Create Group
           </Button>
         </GroupModal>
 
@@ -90,23 +92,34 @@ const MyChats = ({ fetchAgain }) => {
           chats ? (
             <Stack overflowY='scroll'>
               {chats.map((chat) => (
-                <Box
-                  onClick={() => setSelectedChat(chat)}
-                  cursor='pointer'
-                  bg={selectedChat === chat ? '#38B2AC' : "E8E8E8"}
-                  color={selectedChat === chat ? 'white' : "black"}
-                  px={3}
-                  py={2}
-                  borderRadius='lg'
-                  key={chat._id}
-                >
-                  <Text>
-                    {!chat.isGroupChat ? (
-                      getSender(loggedUser, chat.users)
-                    ) : (
-                      chat.chatName
-                    )}
-                  </Text>
+                <Box key={chat._id} display='flex' >
+                  <Avatar
+                    mt="7px"
+                    mr={1}
+                    size="sm"
+                    cursor="pointer"
+                    name = {getSender(loggedUser, chat.users) ? getSender(loggedUser, chat.users) : ""}
+                  src={getSenderFull(loggedUser, chat.users).pic ? getSenderFull(loggedUser, chat.users).pic: ""}
+                  />
+                  
+                  <Box
+                    onClick={() => setSelectedChat(chat)}
+                    cursor='pointer'
+                    bg={selectedChat === chat ? '#38B2AC' : "E8E8E8"}
+                    color={selectedChat === chat ? 'white' : "black"}
+                    px={3}
+                    py={2}
+                    borderRadius='lg'
+                    w='100%'
+                  >
+                    <Text>
+                      {!chat.isGroupChat ? (
+                        getSender(loggedUser, chat.users)
+                      ) : (
+                        chat.chatName
+                      )}
+                    </Text>
+                  </Box>
                 </Box>
               ))}
             </Stack>

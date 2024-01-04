@@ -55,7 +55,7 @@ const authUser = expressAsyncHandler(async (req, res) => {
 });
 
 // /api/user
-const allUsers = expressAsyncHandler(async (req, res) => {
+const searchedUsers = expressAsyncHandler(async (req, res) => {
     const keyword = req.query.search ? {
         $or: [
             { name: { $regex: req.query.search, $options: 'i' } },
@@ -63,8 +63,13 @@ const allUsers = expressAsyncHandler(async (req, res) => {
         ]
     } : {};
 
-    const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+    const users = await User.find(keyword).find({ _id: { $ne: req.user._id } }); 
     res.send(users)
 })
 
-export { registerUser, authUser, allUsers };
+const allUsers = expressAsyncHandler(async (req, res) => {
+    const users = await User.find(); 
+    res.send(users)
+})
+
+export { registerUser, authUser, searchedUsers, allUsers };
