@@ -56,8 +56,9 @@ const server = h.listen(PORT, () => {
 const io = new Server(server,{
     pingTimeout: 60000,
     cors:{
-        origin: 'http://localhost:3000',
-        origin: "https://realtime-chatapp-3mrk.onrender.com"
+        // origin: 'http://localhost:3000',
+        origin: "https://realtime-chatapp-3mrk.onrender.com",
+        methods: ["GET", "POST"],
     }
 })
 
