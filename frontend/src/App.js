@@ -1,13 +1,20 @@
 import './App.css';
-import { Route } from 'react-router-dom';
 import Homepage from './Pages/Homepage'
 import ChatPage from './Pages/ChatPage';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+} from "react-router-dom"; 
 
 function App() {
   return (
-    <div className="App">
-      <Route path='/' component={Homepage} exact/>
-      <Route path='/chats' component={ChatPage}/>
+    <div className="App"> 
+      <Routes>
+      <Route path='/'  element={<Homepage />}></Route>
+      <Route path='/chats'  element={<ChatPage />}></Route>
+      </Routes>
     </div>
   );
 }

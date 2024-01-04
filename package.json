@@ -5,7 +5,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon backend/server.js"
+    "start": "nodemon backend/server.js",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "Abhishek Raut",
   "license": "ISC",
@@ -19,6 +20,7 @@
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.3",
-    "nodemon": "^3.0.2"
+    "nodemon": "^3.0.2",
+    "socket.io": "^4.7.2"
   }
 }
