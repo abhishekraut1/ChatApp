@@ -88,6 +88,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
                 isClosable: true,
                 position: 'bottom'
             });
+            return;
         }
 
         try {
