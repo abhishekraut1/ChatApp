@@ -6,6 +6,7 @@ import { AddIcon } from '@chakra-ui/icons';
 import ChatLoading from './ChatLoading'
 import { getSender, getSenderFull } from '../config/chatLogics';
 import GroupModal from '../components/miscellaneous/GroupModal'
+import groupImage from '../images/group_image.png'
 
 const MyChats = () => {
   const [loggedUser, setLoggedUser] = useState()
@@ -99,7 +100,13 @@ const MyChats = () => {
                     size="sm"
                     cursor="pointer"
                     name = {getSender(loggedUser, chat.users) ? getSender(loggedUser, chat.users) : ""}
-                  src={getSenderFull(loggedUser, chat.users).pic ? getSenderFull(loggedUser, chat.users).pic: ""}
+                  src={
+                    !chat.isGroupChat ? (
+                      getSenderFull(loggedUser, chat.users).pic ? getSenderFull(loggedUser, chat.users).pic: ""
+                    ) : (
+                      groupImage
+                    )
+                  }
                   />
                   
                   <Box
