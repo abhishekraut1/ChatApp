@@ -19,7 +19,7 @@ import {
   Spinner
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider';
 import ProfileModal from './ProfileModal';
 // import { useHistory } from 'react-router-dom';
@@ -28,20 +28,31 @@ import axios from 'axios';
 import ChatLoading from '../ChatLoading';
 import UserListItem from '../UserAvatar/UserListItem';
 import { getSender } from '../../config/chatLogics';
+import notificationSound from '../../sounds/notification_tone.mp3'
 
 const SideDrawer = () => {
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState()
+  const [compareNotification, setCompareNotification] = useState(0)
 
-  const { user, chats, setChats, setSelectedChat, notification, setNotification, userPic, setFetchAgain, fetchAgain } = ChatState();
+  const { user, chats, setChats, setSelectedChat, notification, setNotification, userPic } = ChatState();
   const { isOpen, onOpen, onClose } = useDisclosure()
   // const history = useHistory();
   const navigate = useNavigate();
   const toast = useToast();
 
-  const logoutHandler = () => {
+  
+  const aud = new Audio(notificationSound)
+
+  useEffect(() => {
+    if(notification > compareNotification)aud.play();
+    setCompareNotification(notification)
+  }, [notification])
+  
+
+    const logoutHandler = () => {
     localStorage.removeItem('userInfo')
     // history.push('/');
     navigate('/')
@@ -158,14 +169,14 @@ const SideDrawer = () => {
           </Text>
         </Button>
 
-        <Text fontSize='2xl' p='0 1em 0 0' fontFamily="Work Sans">
+        <Text fontSize={{base:'19px', sm:'2xl'}} p='0 1em 0 0' fontFamily="Work Sans">
           ChatApp
         </Text>
 
-        <div>
+        <div className='notification-and-profile'>
           <Menu >
             <MenuButton className="icon" p={2}>
-              <img style={{position: "relative", top: "7px", right: "7px"}} src="https://uxwing.com/wp-content/themes/uxwing/download/communication-chat-call/bell-icon.png" className="iconImg" alt="" />
+              <img src="https://uxwing.com/wp-content/themes/uxwing/download/communication-chat-call/bell-icon.png" className="iconImg" alt="" />
               {
                 notification.length > 0 &&
                 <div style={{ position: "absolute", top: "10px", right: "15px" }} className="counter">{notification.length}</div>
@@ -191,7 +202,7 @@ const SideDrawer = () => {
           </Menu>
 
           <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+            <MenuButton as={Button} rightIcon={<ChevronDownIcon display={{base:'none', sm:'block'}} />}>
               <Avatar
                 size='sm'
                 cursor='pointer'
@@ -217,7 +228,7 @@ const SideDrawer = () => {
       >
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader borderBottomWidth='1px'>Search Users</DrawerHeader>
+          <DrawerHeader borderBottomWidth='1px' fontSize={{base:"12px"}} >Search Users</DrawerHeader>
           <DrawerBody >
             <Box display='flex' pb={2}>
               <Input

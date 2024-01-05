@@ -123,13 +123,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     
     useEffect(() => {
         fetchMessages();
-
+        console.log(selectedChatCompare)
         selectedChatCompare = selectedChat
+        console.log(selectedChatCompare)
         setNewMassage("")
         setIsTyping(false)
         setTyping(false)
         // eslint-disable-next-line
-    }, [selectedChat])
+    }, [selectedChat])  
     
     // console.log(notification);
     const typingHandler = async(e) => {
@@ -173,7 +174,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                         <IconButton
                             display={{ base: 'flex', md: 'none' }}
                             icon={<ArrowBackIcon />}
-                            onClick={() => setSelectedChat("")}
+                            onClick={() => {setSelectedChat("")}}
                         />
 
                         {selectedChat.isGroupChat ? (

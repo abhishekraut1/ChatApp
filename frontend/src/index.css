@@ -82,3 +82,44 @@ code {
   margin-top: 10px;
 }
 
+@media screen and (max-width: 480px) {
+  .css-8nthb6 {
+    font-size: 13px;
+  }
+  .css-ez23ye {
+    margin: 0px -4px 0 -4px;
+  }
+}
+@media screen and (min-width: 431px) {
+  .iconImg{
+    position: relative;
+    top: 7px;
+    right: 7px;
+  }
+}
+@media screen and (max-width: 430px) {
+  .notification-and-profile{
+    display: flex;
+  }
+  .css-onkibi{
+    display: none;
+  }
+  .css-1fprqee {
+    font-size: 19px;
+  }
+  .iconImg{
+    position: relative;
+    top: 3px;
+    right: 7px;
+    width: 20px;
+  }
+  /* .css-8nthb6 {
+    font-size: 13px;
+  } */
+  /* .chevron-down-icon{
+    display: none;
+  } */
+  .css-ez23ye {
+    margin: 0px -4px 0 -4px;
+  }
+}
