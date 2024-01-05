@@ -228,7 +228,7 @@ const SideDrawer = () => {
       >
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader borderBottomWidth='1px' fontSize={{base:"12px"}} >Search Users</DrawerHeader>
+          <DrawerHeader borderBottomWidth='1px' fontSize={{base:"12px", sm:14}} >Search Users</DrawerHeader>
           <DrawerBody >
             <Box display='flex' pb={2}>
               <Input

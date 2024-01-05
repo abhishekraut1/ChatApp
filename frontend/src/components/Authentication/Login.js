@@ -88,7 +88,7 @@ const Login = () => {
                 <InputGroup size='md'>
                     <Input
                         type={show ? "text" : "password"}
-                        placeholder='Set Your Password'
+                        placeholder='Enter Your Password'
                         onChange={(e) => { setPassword(e.target.value) }}
                         value={password}
                     />
