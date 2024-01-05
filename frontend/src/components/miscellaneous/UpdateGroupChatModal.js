@@ -35,6 +35,16 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
     const { user, selectedChat, setSelectedChat } = ChatState();
 
     const handleAddUser = async (userToAdd) => {
+        if (selectedChat.groupAdmin._id !== user._id && userToAdd._id !== user._id) {
+            toast({
+                title: 'Only admins can add someone!',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+                position: 'bottom'
+            });
+            return;
+        }
         if (selectedChat.users.find((u) => u._id === userToAdd._id)) {
             toast({
                 title: 'User already in group!',
@@ -88,6 +98,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
                 isClosable: true,
                 position: 'bottom'
             });
+            return;
         }
 
         try {
