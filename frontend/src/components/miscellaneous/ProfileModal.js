@@ -7,7 +7,7 @@ import { ChatState } from '../../Context/ChatProvider'
 const ProfileModal = ({sender, children }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {user, userPic} = ChatState();
-    console.log(user)
+    // console.log(user)
     return (
         <>
             {
@@ -38,7 +38,7 @@ const ProfileModal = ({sender, children }) => {
                         <Image
                             borderRadius='full'
                             boxSize='150px'
-                            src={sender ? (sender.pic ? sender.pic: randomUser ) : userPic}
+                            src={sender ? (sender.pic ? sender.pic: randomUser ) : (userPic ? userPic : randomUser)}
                             alt={sender ? sender.name :user.name}
                         ></Image>
                         
