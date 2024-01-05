@@ -111,7 +111,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         socket.on("message received", (newMessageReceived) => {
             if (!selectedChatCompare || newMessageReceived.chat._id !== selectedChatCompare._id) {
                 // give notification
-                if(!notification.includes(newMassage)){
+                if(!notification.includes(newMessageReceived.chat)){
                     setNotification([newMessageReceived.chat, ...notification]);
                     setFetchAgain(!fetchAgain)
                 }
@@ -123,9 +123,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     
     useEffect(() => {
         fetchMessages();
-        console.log(selectedChatCompare)
+        // console.log(selectedChatCompare)
         selectedChatCompare = selectedChat
-        console.log(selectedChatCompare)
+        // console.log(selectedChatCompare)
         setNewMassage("")
         setIsTyping(false)
         setTyping(false)

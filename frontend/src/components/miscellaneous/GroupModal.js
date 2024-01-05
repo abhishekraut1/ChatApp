@@ -19,6 +19,7 @@ const GroupModal = ({ children }) => {
     const handleSearch = async (query) => {
         setSearch(query)
         if (!query) {
+            setSearchResults([])
             return;
         }
 

@@ -28,10 +28,9 @@ import axios from 'axios';
 import ChatLoading from '../ChatLoading';
 import UserListItem from '../UserAvatar/UserListItem';
 import { getSender } from '../../config/chatLogics';
-import notificationSound from '../../sounds/notification_tone.mp3'
 
 const SideDrawer = () => {
-  const [search, setSearch] = useState("");
+  // const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState()
@@ -43,11 +42,7 @@ const SideDrawer = () => {
   const navigate = useNavigate();
   const toast = useToast();
 
-  
-  const aud = new Audio(notificationSound)
-
   useEffect(() => {
-    if(notification > compareNotification)aud.play();
     setCompareNotification(notification)
   }, [notification])
   
@@ -57,15 +52,16 @@ const SideDrawer = () => {
     // history.push('/');
     navigate('/')
   }
-  const handleSearch = async () => {
+  const handleSearch = async (search) => {
     if (!search) {
-      toast({
-        title: 'Please enter something in search!',
-        status: 'warning',
-        duration: 3000,
-        isClosable: true,
-        position: 'top-left'
-      });
+      setSearchResults([])
+      // toast({
+      //   title: 'Please enter something in search!',
+      //   status: 'warning',
+      //   duration: 3000,
+      //   isClosable: true,
+      //   position: 'top-left'
+      // });
       return;
     }
 
@@ -94,11 +90,11 @@ const SideDrawer = () => {
     }
   }
 
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      handleSearch();
-    }
-  };
+  // const handleKeyPress = (event) => {
+  //   if (event.key === 'Enter') {
+  //     handleSearch();
+  //   }
+  // };
 
   const accessChats = async (userId) => {
     try {
@@ -185,11 +181,12 @@ const SideDrawer = () => {
             <MenuList pl={2}>
               {!notification.length && "No New Messages Received"}
               {notification.map((notif) =>
+                
                 <MenuItem
                   key={notif._id}
                   onClick={() => {
                     setSelectedChat(notif);
-                    setNotification(notification.filter((n) => n !== notif));
+                    setNotification(notification.filter((n) => n.id !== notif.id));
                   }}
                 >
                   {notif.isGroupChat
@@ -197,7 +194,7 @@ const SideDrawer = () => {
                     : `New Message from ${getSender(user, notif.users)}`
                   }
                 </MenuItem>
-              )}
+)}
             </MenuList>
           </Menu>
 
@@ -234,12 +231,12 @@ const SideDrawer = () => {
               <Input
                 placeholder='Search by name or email'
                 mr={2}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)
+                // value={search}
+                onChange={(e) => handleSearch(e.target.value)
                 }
-                onKeyDown={handleKeyPress}
+                // onKeyDown={handleKeyPress}
               ></Input>
-              <Button className='go-search' onClick={handleSearch}>GO</Button>
+              {/* <Button className='go-search' onClick={handleSearch(e.target.value)}>GO</Button> */}
             </Box>
 
             {
