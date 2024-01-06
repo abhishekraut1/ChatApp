@@ -48,6 +48,7 @@ const SideDrawer = () => {
   
 
     const logoutHandler = () => {
+      setSelectedChat()
     localStorage.removeItem('userInfo')
     // history.push('/');
     navigate('/')
