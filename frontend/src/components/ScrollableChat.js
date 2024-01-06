@@ -7,6 +7,23 @@ import { Tooltip } from '@chakra-ui/react'
 
 const ScrollableChat = ({ isGroupChat, messages }) => {
     const { user } = ChatState()
+    console.log(messages)
+
+    const time = (str) => {
+        const dateString = str;
+        const date = new Date(dateString);
+
+        const options = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZone: 'Asia/Kolkata',
+        };
+        console.log(date.toLocaleString('en-IN', options))
+        return date.toLocaleString('en-IN', options);
+    }
 
     return (
         <ScrollableFeed>
@@ -38,16 +55,46 @@ const ScrollableChat = ({ isGroupChat, messages }) => {
                                 maxWidth: '75%'
                             }}
                         >
-                            {isGroupChat && m.sender._id !== user._id
+                            {isGroupChat
                                 ? <div style={{ display: 'flex', flexDirection: 'column' }}  >
-                                    <div style={{ fontSize: '12px', fontFamily: 'cursive', color: '#FFEB3B' }} >
+                                    {
+                                        m.sender._id !== user._id 
+                                        ? <div style={{ fontSize: '12px', fontFamily: 'monospace', color: '#b8daf3' }} >
                                         {m.sender.name} :
-                                    </div>
+                                        </div>
+                                        : <></>
+                                    }
+                                    
                                     <div>
                                         {m.content}
                                     </div>
+
+                                    {m.sender._id === user._id 
+                                    ? 
+                                    <div style={{ fontSize: "9px", color: "#b8daf3", marginTop: "8px", textAlign: 'right' }} >{time(m.createdAt)}
+                                    </div>
+                                    : 
+                                    <div style={{ fontSize: "9px", color: "#b8daf3", marginTop: "8px" }} >{time(m.createdAt)}
+                                    </div>
+                                    }
+                                    
                                 </div>
-                                : <>{m.content}</>
+                                :
+                                 <div style={{ display: 'flex', flexDirection: 'column' }} >
+                                    <div>{m.content}</div>
+                                    {
+                                        m.sender._id === user._id 
+                                        ? <div style={{
+                                            fontSize: "9px", color: "#b8daf3", marginTop: "8px", textAlign: 'right'
+                                        }} >{time(m.createdAt)}
+                                        </div>
+                                        : <div style={{
+                                            fontSize: "9px", color: "#b8daf3", marginTop: "8px",
+                                        }} >{time(m.createdAt)}
+                                        </div>
+                                    }
+                                    
+                                </div>
                             }
 
                         </span>
