@@ -217,7 +217,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                                     overflowY: 'scroll',
                                     overflowX: 'hidden'
                                 }} >
-                                <ScrollableChat messages={messages} />
+                                <ScrollableChat isGroupChat={selectedChat.isGroupChat} messages={messages} />
                             </div>
                         )}
 
