@@ -78,7 +78,7 @@ const createGroupChat = expressAsyncHandler(async (req, res) => {
     }
 
     const users = JSON.parse(req.body.users);
-    users.push(req.user);
+    // users.push(req.user);
 
     if (users.length < 3) {
         res

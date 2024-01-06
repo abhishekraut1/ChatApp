@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Button, FormControl, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast } from '@chakra-ui/react'
 import { ChatState } from '../../Context/ChatProvider'
 import axios from 'axios'
@@ -16,6 +16,12 @@ const GroupModal = ({ children }) => {
     const toast = useToast();
     const { user, chats, setChats } = ChatState();
 
+    useEffect(() => {
+      setSelectedUsers([user])
+      console.log(selectedUsers)
+    }, [])
+    
+
     const handleSearch = async (query) => {
         setSearch(query)
         if (!query) {
@@ -30,7 +36,7 @@ const GroupModal = ({ children }) => {
                     Authorization: `Bearer ${user.token}`
                 }
             }
-            const { data } = await axios.get(`/api/user?search=${search}`, config);
+            const { data } = await axios.get(`/api/user?search=${query}`, config);
             // console.log(data);
             setLoading(false)
             setSearchResults(data)
@@ -56,7 +62,20 @@ const GroupModal = ({ children }) => {
             });
             return;
         }
+        // let adminIndex = 0;
+        // for(let i=0;i<selectedUsers.length;i++){
+        //     if(selectedUsers[i]._id === user._id){
+        //         adminIndex = i;
+        //         break;
+        //     }
+        // }
 
+        // for(let i=adminIndex;i>0;i--){
+        //     let x = selectedUsers[i];
+        //     selectedUsers[i] = selectedUsers[i-1];
+        //     selectedUsers[i-1] = x;
+        // }
+        // console.log(adminIndex)
         try {
             const config = {
                 headers:{
@@ -82,7 +101,7 @@ const GroupModal = ({ children }) => {
             });
         } catch (error) {
             toast({
-                title: 'Failed to create group!',
+                title: 'Group must include more than 2 users.',
                 status: 'error',
                 duration: 3000,
                 isClosable: true,
@@ -102,7 +121,6 @@ const GroupModal = ({ children }) => {
             });
             return;
         }
-
         setSelectedUsers([...selectedUsers, userToAdd])
     }
 
@@ -113,9 +131,8 @@ const GroupModal = ({ children }) => {
     }
 
     const clearSearchedAndSelectedUsers = () => {
-        setSelectedUsers([]);
+        setSelectedUsers([user]);
         setSearchResults([]);
-        onClose();
     }
     
 
@@ -132,7 +149,7 @@ const GroupModal = ({ children }) => {
                         display='flex'
                         justifyContent='center'
                     >Create Group Chat</ModalHeader>
-                    <ModalCloseButton />
+                    <ModalCloseButton onClick={clearSearchedAndSelectedUsers} />
                     <ModalBody
                         pb={6}
                         display='flex'
@@ -167,9 +184,9 @@ const GroupModal = ({ children }) => {
                             ))}
                         </Box>
                         {loading ? (
-                            <div>loading</div>
+                            <div>loading...</div>
                         ) : (
-                            searchResults?.slice(0, 4).map(user => (
+                            searchResults?.map(user => (
                                 <UserListItem
                                     key={user._id}
                                     user={user}
@@ -177,11 +194,11 @@ const GroupModal = ({ children }) => {
                         )}
                     </ModalBody>
 
-                    <ModalFooter>
-                        <Button colorScheme='blue' bg='red' mx={2} onClick={() => {
-                            clearSearchedAndSelectedUsers();
+                    <ModalFooter display='flex' justifyContent='space-between'>
+                        <Button color='white' bg='red' mx={2} onClick={() => {
+                            clearSearchedAndSelectedUsers(); onClose();
                         }} >Close</Button>
-                        <Button colorScheme='blue' onClick={handleSubmit}>Create Chat</Button>
+                        <Button colorScheme='blue' onClick={()=>{handleSubmit(); onClose();}}>Create Chat</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
