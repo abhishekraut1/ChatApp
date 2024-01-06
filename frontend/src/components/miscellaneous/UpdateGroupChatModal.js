@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Modal,
     ModalOverlay,
@@ -172,16 +172,10 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
 
     const handleSearch = async (query) => {
         setSearch(query);
-        // if (!query) {
-        //     toast({
-        //         title: 'Please enter something in search!',
-        //         status: 'warning',
-        //         duration: 3000,
-        //         isClosable: true,
-        //         position: 'top-left'
-        //     });
-        //     return;
-        // }
+        if (!query) {
+            setSearchResults([])
+            return;
+        }
 
         try {
             setLoading(true);
@@ -208,6 +202,16 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
         }
     }
 
+    const clearSearchedAndSelectedUsers = () => {
+        setSearchResults([]);
+    }
+
+    useEffect(() => {
+        clearSearchedAndSelectedUsers()
+        setGroupChatName("")
+    }, [isOpen])
+    
+
     return (
         <>
             <IconButton display={{ base: 'flex' }} icon={<ViewIcon />} onClick={onOpen}></IconButton>
@@ -221,7 +225,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
                         d="flex"
                         justifyContent="center"
                     >{selectedChat.chatName}</ModalHeader>
-                    <ModalCloseButton />
+                    <ModalCloseButton  />
                     <ModalBody >
                         <Box
                             w="100%" display="flex" flexWrap="wrap" pb={3}
@@ -273,10 +277,11 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
                         )}
                     </ModalBody>
 
-                    <ModalFooter>
+                    <ModalFooter display='flex' justifyContent='space-between'>
                         <Button colorScheme='red' onClick={() => handleRemove(user)}>
                             Leave Group
                         </Button>
+                        <Button colorScheme='blue' onClick={onClose} >Close</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
