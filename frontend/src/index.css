@@ -90,6 +90,11 @@ code {
     margin: 0px -4px 0 -4px;
   }
 }
+@media screen and (max-width: 754px) {
+  .css-zijf06{
+    height: 96%;
+  }
+}
 @media screen and (min-width: 431px) {
   .iconImg{
     position: relative;
