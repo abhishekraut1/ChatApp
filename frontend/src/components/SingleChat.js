@@ -193,10 +193,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             }
         }, timerLength);
     };
-
-    window.onhashchange = function(e) {
-        setSelectedChat("")
-    }
     
     return (
         <>
