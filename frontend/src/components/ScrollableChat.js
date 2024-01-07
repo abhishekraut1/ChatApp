@@ -7,7 +7,7 @@ import { Tooltip } from '@chakra-ui/react'
 
 const ScrollableChat = ({ isGroupChat, messages }) => {
     const { user } = ChatState()
-    console.log(messages)
+    // console.log(messages)
 
     const time = (str) => {
         const dateString = str;
@@ -21,7 +21,7 @@ const ScrollableChat = ({ isGroupChat, messages }) => {
             minute: '2-digit',
             timeZone: 'Asia/Kolkata',
         };
-        console.log(date.toLocaleString('en-IN', options))
+        // console.log(date.toLocaleString('en-IN', options))
         return date.toLocaleString('en-IN', options);
     }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ChatState } from '../Context/ChatProvider'
-import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react'
+import { Box, Button, FormControl, IconButton, Image, Input, Spinner, Text, useToast } from '@chakra-ui/react'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { getSender, getSenderFull } from '../config/chatLogics'
 import ProfileModal from './miscellaneous/ProfileModal'
@@ -10,6 +10,7 @@ import ScrollableChat from './ScrollableChat'
 import { io } from "socket.io-client";
 import Lottie from 'lottie-react'
 import animationData from "../animations/typing.json";
+import sendMessageIcon from '../images/send_message_icon.png'
 
 // const ENDPOINT = "http://localhost:5000";
 const ENDPOINT = "https://realtime-chatapp-3mrk.onrender.com";
@@ -30,6 +31,42 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     const sendMessage = async (event) => {
         if (event.key === "Enter" && newMassage) {
+            socket.emit("stop typing", selectedChat._id);
+            try {
+                const config = {
+                    headers: {
+                        "Content-type": "application/json",
+                        Authorization: `Bearer ${user.token}`
+                    }
+                }
+                setNewMassage("");
+
+                const { data } = await axios.post(
+                    '/api/message',
+                    {
+                        content: newMassage,
+                        chatId: selectedChat._id
+                    },
+                    config)
+
+
+                // console.log(data);
+                socket.emit("new message", data);
+                setMessages([...messages, data]);
+            } catch (error) {
+                toast({
+                    title: 'Error occurred!',
+                    description: 'Failed to send the message!',
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                    position: 'bottom'
+                });
+            }
+        }
+    }
+    const sendMessage2 = async () => {
+        if (newMassage) {
             socket.emit("stop typing", selectedChat._id);
             try {
                 const config = {
@@ -224,15 +261,22 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                         <FormControl onKeyDown={sendMessage} isRequired >
                             {isTyping ? <div>
                                 <Lottie 
-                                style={{ width: 100, height:50}} animationData={animationData} loop={true} />
+                                style={{ width: 70, height:50}} animationData={animationData} loop={true} />
                             </div> : <div style={{ width: 100, height:50}}></div>}
+                            <Box display='flex' justifyContent='space-between' >
                             <Input
                                 variant='filled'
                                 bg='#E0E0E0'
                                 placeholder='Enter a message...'
                                 value={newMassage}
                                 onChange={typingHandler}
-                            />
+                                className='input-for-send'
+                                mr='5px'
+                                alignSelf='flex-end'
+                                />
+                                <img onClick={sendMessage2}  style={{ width:'2.8rem', cursor:'pointer', transform: "rotate(40deg)" }} alt='Send'  src={sendMessageIcon} ></img>
+
+                            </Box>
                         </FormControl>
                     </Box>
 
