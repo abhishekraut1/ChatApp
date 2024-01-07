@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ChatState } from '../Context/ChatProvider'
-import { Box, Button, FormControl, IconButton, Image, Input, Spinner, Text, useToast } from '@chakra-ui/react'
+import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { getSender, getSenderFull } from '../config/chatLogics'
 import ProfileModal from './miscellaneous/ProfileModal'
@@ -194,6 +194,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         }, timerLength);
     };
 
+    window.onhashchange = function(e) {
+        setSelectedChat("")
+    }
+    
     return (
         <>
             {selectedChat ? (
@@ -274,7 +278,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                                 mr='5px'
                                 alignSelf='flex-end'
                                 />
-                                <img onClick={sendMessage2}  style={{ width:'2.8rem', cursor:'pointer', transform: "rotate(40deg)" }} alt='Send'  src={sendMessageIcon} ></img>
+                                <img onClick={sendMessage2}  style={{ width:'2.8rem', cursor:'pointer', transform: "rotate(40deg)",position: "relative", top: "1px" }} alt='Send'  src={sendMessageIcon} ></img>
 
                             </Box>
                         </FormControl>

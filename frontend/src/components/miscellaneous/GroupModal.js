@@ -18,7 +18,7 @@ const GroupModal = ({ children }) => {
 
     useEffect(() => {
       setSelectedUsers([user])
-      console.log(selectedUsers)
+    //   console.log(selectedUsers)
     }, [])
     
 
