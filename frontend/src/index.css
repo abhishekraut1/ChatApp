@@ -90,14 +90,6 @@ code {
     margin: 0px -4px 0 -4px;
   }
 }
-@media screen and (max-width: 754px) {
-  /* .css-zijf06{
-    height: 96%;
-  } */
-  .css-2u79bc{
-    height: 86.5vh;
-  }
-}
 @media screen and (min-width: 431px) {
   .iconImg{
     position: relative;
