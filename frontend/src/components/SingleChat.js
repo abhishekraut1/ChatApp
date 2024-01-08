@@ -13,7 +13,8 @@ import animationData from "../animations/typing.json";
 import sendMessageIcon from '../images/send_message_icon.png'
 
 // const ENDPOINT = "http://localhost:5000";
-const ENDPOINT = "https://realtime-chatapp-3mrk.onrender.com";
+// const ENDPOINT = "https://realtime-chatapp-3mrk.onrender.com";
+const ENDPOINT = "realtime-chat-app-mern.vercel.app";
 let socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
