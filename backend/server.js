@@ -57,7 +57,7 @@ const io = new Server(server,{
     pingTimeout: 60000,
     cors:{
         // origin: 'http://localhost:3000',
-        origin: "https://chatapp-test-frontend.vercel.app",
+        origin: "https://chatapp-test-frontend.vercel.app ",
         methods: ["GET", "POST"],
     }
 })
